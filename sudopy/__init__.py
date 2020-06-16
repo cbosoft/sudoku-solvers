@@ -1,1 +1,1 @@
-from sudopy.puzzle import Puzzle
+from sudopy.puzzle import Puzzle, InvalidMove
