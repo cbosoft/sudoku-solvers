@@ -6,7 +6,6 @@ class InvalidMove(Exception):
     '''Invalid move in sudoku'''
 
 
-
 def next_rc(row, col):
     col += 1
     if col >= 9:
@@ -24,7 +23,6 @@ def _solve_puzzle(puzzle, row, col):
         return _solve_puzzle(puzzle, *next_rc(row, col))
 
     for i in range(9):
-        print('trying', i+1, '@', row, col)
         try:
             puzzle[row,col] = i+1
         except InvalidMove:
@@ -35,8 +33,6 @@ def _solve_puzzle(puzzle, row, col):
 
         if p := _solve_puzzle(puzzle, *next_rc(row, col)):
             return p
-        else:
-            print('continuing from', i+1, '@', row, col)
 
     return False
 
@@ -89,17 +85,14 @@ class Puzzle:
 
         for i in range(9):
             if self[i, col] == v:
-                print('incol',v,i,col)
                 return False
             if self[row, i] == v:
-                print('inrow')
                 return False
 
         sq_row, sq_col = int((row)//3)*3, int((col)//3)*3
         for i in range(sq_row, sq_row+3):
             for j in range(sq_col, sq_col+3):
                 if self[i,j] == v:
-                    print('insq', i, j, row,col, sq_row, sq_col)
                     return False
 
         return True
