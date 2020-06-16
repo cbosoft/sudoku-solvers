@@ -6,6 +6,41 @@ class InvalidMove(Exception):
     '''Invalid move in sudoku'''
 
 
+
+def next_rc(row, col):
+    col += 1
+    if col >= 9:
+        col -= 9
+        row += 1
+    return row, col
+
+
+def _solve_puzzle(puzzle, row, col):
+    '''Solves a sudoku puzzle recursively by backtracking method.'''
+    puzzle = deepcopy(puzzle)
+
+    # space is not blank; skip
+    if puzzle[row,col] != 0:
+        return _solve_puzzle(puzzle, *next_rc(row, col))
+
+    for i in range(9):
+        print('trying', i+1, '@', row, col)
+        try:
+            puzzle[row,col] = i+1
+        except InvalidMove:
+            continue
+
+        if row == 8 and col == 8:
+            return puzzle
+
+        if p := _solve_puzzle(puzzle, *next_rc(row, col)):
+            return p
+        else:
+            print('continuing from', i+1, '@', row, col)
+
+    return False
+
+
 class Puzzle:
 
     def __init__(self, data):
@@ -32,48 +67,11 @@ class Puzzle:
                 columnwise_sums[j] += c
         return all([s == 45 for s in columnwise_sums]) and all([s == 45 for s in rowwise_sums])
 
-    def next_rc(self, row, col):
-        col += 1
-        if col >= 9:
-            col -= 9
-            row += 1
-        return row, col
 
 
-
-    def solve(self, row=0, col=0):
-        puzzle = deepcopy(self)
-    
-        # space is not blank; skip
-        if puzzle[row,col] != 0:
-            return puzzle.solve(*puzzle.next_rc(row, col))
-    
-        print(puzzle)
-        print(row, col)
-        print()
-        #sleep(1)
-    
-        # iter is oob: finished
-        if row == 9:
-            self.data = puzzle.data
-    
-        for i in range(9):
-            print('trying', i+1, '@', row, col)
-            try:
-                puzzle[row,col] = i+1
-            except InvalidMove:
-                continue
-
-            if p := puzzle.solve(*puzzle.next_rc(row, col)):
-                return p
-            else:
-                print('continuing from', i+1, '@', row, col)
-    
-        print('nothing left to do')
-        print(puzzle)
-        print(row, col)
-        print()
-        return False
+    def solve(self):
+        solution = _solve_puzzle(self, 0, 0)
+        self.data = solution.data
 
 
     def __str__(self):
