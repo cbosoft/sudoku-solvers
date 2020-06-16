@@ -1,6 +1,6 @@
 import sys
 
-from sudopy import Puzzle
+from sudopy import Puzzle, InvalidMove
 
 # http://lipas.uwasa.fi/~timan/sudoku/
 puzzles = [
@@ -47,6 +47,45 @@ def test_completion_check():
 
     print(f'{name} passed.')
 
+def test_valid_move_check():
+    name = 'Valid move check test'
+
+    valid_moves = [
+            [0, 0, 1, 0, 1, 2],
+            [0, 0, 1, 1, 4, 1],
+            [2, 2, 1, 0, 3, 1],
+        ]
+
+    for r1, c1, v1, r2, c2, v2 in valid_moves:
+        puzzle = Puzzle([[0 for i in range(9)] for j in range(9)])
+        puzzle[r1,c1] = v1
+
+        try:
+            puzzle[r2,c2] = v2
+        except InvalidMove:
+            print(puzzle)
+            print(f'{name} failed: valid move erroneously counted as invalid.')
+            exit(1)
+
+    invalid_moves = [
+            [0, 0, 1, 0, 8, 1],
+            [0, 0, 1, 1, 1, 1],
+            [0, 0, 1, 8, 0, 1],
+        ]
+
+    for r1, c1, v1, r2, c2, v2 in invalid_moves:
+        puzzle = Puzzle([[0 for i in range(9)] for j in range(9)])
+        puzzle[0,0] = 1
+
+        try:
+            puzzle[1,0] = 1
+        except InvalidMove:
+            pass
+        else:
+            print(f'{name} failed: invalid move not recognised.')
+            exit(1)
+    print(f'{name} passed.')
+
 
 def test_solver():
     name = 'Solver test'
@@ -63,3 +102,4 @@ def test_solver():
 
 if __name__ == '__main__':
     test_completion_check()
+    test_valid_move_check()
