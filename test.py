@@ -56,3 +56,6 @@ def test():
         else:
             print('fail')
             sys.exit(1)
+
+if __name__ == '__main__':
+    test_completion_check()
