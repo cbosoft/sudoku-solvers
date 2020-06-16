@@ -78,7 +78,7 @@ class Puzzle:
         assert isinstance(coord, tuple)
         assert len(coord) == 2
         row, col = coord
-        return self.data[row][coord]
+        return self.data[row][col]
 
 
     def check_valid_move(self, row, col, v):
