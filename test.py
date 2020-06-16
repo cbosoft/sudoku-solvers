@@ -95,7 +95,9 @@ def test_solver():
         solved = puzzle.solve()
 
         if not puzzle.complete():
+            print(puzzle)
             print(f'{name} failed: solver fails to find solution ({i}).')
+            print(Puzzle(solutions[i]))
             sys.exit(1)
 
     print(f'{name} passed.')
@@ -103,3 +105,4 @@ def test_solver():
 if __name__ == '__main__':
     test_completion_check()
     test_valid_move_check()
+    test_solver()
