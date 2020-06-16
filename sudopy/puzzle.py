@@ -13,12 +13,25 @@ class Puzzle:
 
         self.data = data
 
+
     def complete(self):
         columnwise_sums = [0 for i in range(9)]
         rowwise_sums = [0 for i in range(9)]
         for i in range(9):
             for j in range(9):
-                c = self.data[i][j]
+                c = self[i,j]
                 rowwise_sums[i] += c
                 columnwise_sums[j] += c
         return all([s == 45 for s in columnwise_sums]) and all([s == 45 for s in rowwise_sums])
+    def __getitem__(self, k):
+        assert isinstance(k, tuple)
+        assert len(k) == 2
+        i, j = k
+        return self.data[i][j]
+
+
+    def __setitem__(self, k, v):
+        assert isinstance(k, tuple)
+        assert len(k) == 2
+        i, j = k
+        self.data[i][j] = v
