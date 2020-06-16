@@ -74,11 +74,11 @@ class Puzzle:
         return '\n'.join([' '.join([str(c) if c > 0 else '-' for c in row]) for row in self.data])
 
 
-    def __getitem__(self, k):
-        assert isinstance(k, tuple)
-        assert len(k) == 2
-        i, j = k
-        return self.data[i][j]
+    def __getitem__(self, coord):
+        assert isinstance(coord, tuple)
+        assert len(coord) == 2
+        row, col = coord
+        return self.data[row][coord]
 
 
     def check_valid_move(self, row, col, v):
