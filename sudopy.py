@@ -64,14 +64,26 @@ class Puzzle:
         return all([s == 45 for s in columnwise_sums]) and all([s == 45 for s in rowwise_sums])
 
 
-
     def solve(self):
         solution = _solve_puzzle(self, 0, 0)
         self.data = solution.data
 
 
     def __str__(self):
-        return '\n'.join([' '.join([str(c) if c > 0 else '-' for c in row]) for row in self.data])
+        strdata = [[str(c) if c > 0 else '-' for c in row] for row in self.data]
+        for i, row in enumerate(strdata):
+            strdata[i].insert(6, '│')
+            strdata[i].insert(3, '│')
+        
+        lines = [' '.join(row) for row in strdata]
+        bar = ['─']*len(lines[0])
+        bar[6] = '┼'
+        bar[14] = '┼'
+        bar=''.join(bar)
+        lines.insert(6, bar)
+        lines.insert(3, bar)
+
+        return '\n'.join(lines)
 
 
     def __getitem__(self, coord):
