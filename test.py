@@ -32,34 +32,34 @@ solutions = [
 ]
 
 def test_completion_check():
-    for puzzle in puzzles:
+    name = 'Completion check test'
+    for i, puzzle in enumerate(puzzles):
         puzzle = Puzzle(puzzle)
         if puzzle.complete():
-            print('fail: incomplete puzzle marked as complete')
+            print(f'{name} failed: incomplete puzzle marked as complete ({i}).')
             exit(1)
-        else:
-            print('pass')
 
-    for solution in solutions:
+    for i, solution in enumerate(solutions):
         solution = Puzzle(solution)
-        if solution.complete():
-            print('pass')
-        else:
-            print('fail: complete puzzle marked as incomplete')
+        if not solution.complete():
+            print(f'{name} failed: complete puzzle marked as incomplete ({i}).')
             exit(1)
 
+    print(f'{name} passed.')
 
-def test():
 
-    for puzzle in puzzles:
+def test_solver():
+    name = 'Solver test'
+
+    for i, puzzle in enumerate(puzzles):
         puzzle = Puzzle(puzzles[0])
         solved = puzzle.solve()
 
-        if puzzle.complete():
-            print('pass')
-        else:
-            print('fail')
+        if not puzzle.complete():
+            print(f'{name} failed: solver fails to find solution ({i}).')
             sys.exit(1)
+
+    print(f'{name} passed.')
 
 if __name__ == '__main__':
     test_completion_check()
