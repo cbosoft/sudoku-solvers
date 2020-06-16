@@ -18,6 +18,9 @@ def _solve_puzzle(puzzle, row, col):
     '''Solves a sudoku puzzle recursively by backtracking method.'''
     puzzle = deepcopy(puzzle)
 
+    if row == 9 or col == 9:
+        return puzzle
+
     # space is not blank; skip
     if puzzle[row,col] != 0:
         return _solve_puzzle(puzzle, *next_rc(row, col))
