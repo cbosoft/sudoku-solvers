@@ -1,37 +1,29 @@
 import sys
+from glob import glob
 
 from sudopy import Puzzle, InvalidMove
 
-# http://lipas.uwasa.fi/~timan/sudoku/
-puzzles = [
-    [
-        [0, 4, 0, 0, 0, 0, 1, 7, 9],
-        [0, 0, 2, 0, 0, 8, 0, 5, 4],
-        [0, 0, 6, 0, 0, 5, 0, 0, 8],
-        [0, 8, 0, 0, 7, 0, 9, 1, 0],
-        [0, 5, 0, 0, 9, 0, 0, 3, 0],
-        [0, 1, 9, 0, 6, 0, 0, 4, 0],
-        [3, 0, 0, 4, 0, 0, 7, 0, 0],
-        [5, 7, 0, 1, 0, 0, 2, 0, 0],
-        [9, 2, 8, 0, 0, 0, 0, 6, 0]
-    ]
-]
+def read_puzzles(puzzles_pattern):
+    puzzles_paths = glob(puzzles_pattern)
+    rv = list()
+    for path in puzzles_paths:
+        with open(path) as f:
+            lines = f.readlines()
+        cells = list()
+        for line in lines:
+            line = line.strip()
+            if not line or '-' in line:
+                continue
+            if '=' in line:
+                line = line[:line.index('=')]
+            line = line.replace('|', '')
+            cells.append([int(c) for c in line.split()])
+        cells = cells[:9]
+        rv.append(cells)
+    return rv
 
-solutions = [
-    [
-        [8, 4, 5, 6, 3, 2, 1, 7, 9],
-        [7, 3, 2, 9, 1, 8, 6, 5, 4],
-        [1, 9, 6, 7, 4, 5, 3, 2, 8],
-        [6, 8, 3, 5, 7, 4, 9, 1, 2],
-        [4, 5, 7, 2, 9, 1, 8, 3, 6],
-        [2, 1, 9, 8, 6, 3, 5, 4, 7],
-        [3, 6, 1, 4, 2, 9, 7, 8, 5],
-        [5, 7, 4, 1, 8, 6, 2, 9, 3],
-        [9, 2, 8, 3, 5, 7, 4, 6, 1]
-    ]
-]
 
-def test_completion_check():
+def test_completion_check(puzzles, solutions):
     name = 'Completion check test'
     for i, puzzle in enumerate(puzzles):
         puzzle = Puzzle(puzzle)
@@ -87,12 +79,19 @@ def test_valid_move_check():
     print(f'{name} passed.')
 
 
-def test_solver():
+def test_solver(puzzles):
     name = 'Solver test'
 
     for i, puzzle in enumerate(puzzles):
         puzzle = Puzzle(puzzles[0])
-        solved = puzzle.solve()
+
+        try:
+            puzzle.solve()
+        except Exception as e:
+            print(puzzle)
+            print(f'{name} failed: solver fails to find solution ({i}).')
+            raise
+
 
         if not puzzle.complete():
             print(puzzle)
@@ -102,7 +101,12 @@ def test_solver():
 
     print(f'{name} passed.')
 
+
 if __name__ == '__main__':
-    test_completion_check()
+    # http://lipas.uwasa.fi/~timan/sudoku/
+    puzzles = read_puzzles('puzzles/*.txt')
+    solutions = read_puzzles('solutions/*.txt')
+
+    test_completion_check(puzzles, solutions)
     test_valid_move_check()
-    test_solver()
+    test_solver(puzzles)
