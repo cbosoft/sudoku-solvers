@@ -23,6 +23,12 @@ class Puzzle:
                 rowwise_sums[i] += c
                 columnwise_sums[j] += c
         return all([s == 45 for s in columnwise_sums]) and all([s == 45 for s in rowwise_sums])
+
+
+    def __str__(self):
+        return '\n'.join([' '.join([str(c) for c in row]) for row in self.data])
+
+
     def __getitem__(self, k):
         assert isinstance(k, tuple)
         assert len(k) == 2
