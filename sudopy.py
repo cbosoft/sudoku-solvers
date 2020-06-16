@@ -15,7 +15,9 @@ def next_rc(row, col):
 
 
 def _solve_puzzle(puzzle, row, col):
-    '''Solves a sudoku puzzle recursively by backtracking method.'''
+    '''
+    Solves a sudoku puzzle recursively by backtracking method.
+    '''
     puzzle = deepcopy(puzzle)
 
     if row == 9 or col == 9:
@@ -41,6 +43,16 @@ def _solve_puzzle(puzzle, row, col):
 
 
 class Puzzle:
+    '''
+    Sudoku puzzle object. Contains data for each of the 81 squares on a sudoku
+    grid and has methods to check if the grid is solved (`Puzzle.complete()`)
+    and to solve the puzzle (`Puzzle.solve()`).
+
+    Constructor takes one parameter: a list of lists of integers in row-major
+    form or a sort of matrix or table. A zero value in this table represents an
+    empty space in the grid, 1-9 are answers in the grid. Any other value is
+    invalid. This is all checked in `__init__`.
+    '''
 
     def __init__(self, data):
         # data should be a 9x9 list of lists of int
@@ -57,6 +69,10 @@ class Puzzle:
 
 
     def complete(self):
+        '''
+        Checks if the puzzle is solved by seeing if all columns sum to 45 and
+        all rows sum to 45.
+        '''
         columnwise_sums = [0 for i in range(9)]
         rowwise_sums = [0 for i in range(9)]
         for i in range(9):
@@ -68,6 +84,11 @@ class Puzzle:
 
 
     def solve(self):
+        '''
+        Light wrapper that calls the backend `_solve_puzzle(...)` function on
+        this object. This recursive function returns the solved version of the
+        sudoku grid.
+        '''
         solution = _solve_puzzle(self, 0, 0)
         self.data = solution.data
 
