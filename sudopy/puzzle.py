@@ -77,7 +77,7 @@ class Puzzle:
 
 
     def __str__(self):
-        return '\n'.join([' '.join([str(c) for c in row]) for row in self.data])
+        return '\n'.join([' '.join([str(c) if c > 0 else '-' for c in row]) for row in self.data])
 
 
     def __getitem__(self, k):
