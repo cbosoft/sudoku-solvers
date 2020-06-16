@@ -1,3 +1,5 @@
+from sudopy.solver import solve_puzzle
+
 class Puzzle:
 
     def __init__(self, data):
@@ -23,6 +25,10 @@ class Puzzle:
                 rowwise_sums[i] += c
                 columnwise_sums[j] += c
         return all([s == 45 for s in columnwise_sums]) and all([s == 45 for s in rowwise_sums])
+
+
+    def solve(self):
+        return solve_puzzle(self)
 
 
     def __str__(self):
