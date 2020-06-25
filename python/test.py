@@ -103,9 +103,8 @@ def test_solver(puzzles):
 
 
 if __name__ == '__main__':
-    # http://lipas.uwasa.fi/~timan/sudoku/
-    puzzles = read_puzzles('puzzles/*.txt')
-    solutions = read_puzzles('solutions/*.txt')
+    puzzles = read_puzzles('../puzzles/*.txt')
+    solutions = read_puzzles('../solutions/*.txt')
 
     test_completion_check(puzzles, solutions)
     test_valid_move_check()
